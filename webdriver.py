@@ -23,6 +23,8 @@ class WebDriver():
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
         options.add_argument(f'user-agent={user_agent}')
         options.add_argument('--disable-web-security')
+        options.add_argument('--headless')
+        options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-extensions')
         options.add_argument('--window-size=300, 768')
         options.add_argument('--disable-notifications')
@@ -72,7 +74,7 @@ class WebDriver():
             
     
     
-    def search_mod(self, url:str):
+    def search_mod(self, url:str) -> dict:
         self.driver.get(url)
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -105,5 +107,4 @@ class WebDriver():
                     
             full_data[name] = dic_list
     
-        print(full_data.get('Mouse Tweaks'))
         return full_data
