@@ -2,3 +2,5 @@ __pycache__
 poetry.lock
 test.py
 mods
+*.session
+*session-journal

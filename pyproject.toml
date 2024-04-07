@@ -10,6 +10,8 @@ python = "^3.10"
 webdriver-manager = "^4.0.1"
 selenium = "^4.13.0"
 beautifulsoup4 = "^4.12.2"
+pyrogram = "^2.0.106"
+tgcrypto = "^1.2.5"
 
 
 [build-system]

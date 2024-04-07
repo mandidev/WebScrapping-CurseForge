@@ -89,7 +89,7 @@ class WebDriver():
             url_avatar = mod['avatarUrl']
             description = mod['summary']
             name = mod['name']
-            page_size = 200
+            page_size = 5
             url_screenshots = f"https://www.curseforge.com/minecraft/mc-mods/{mod['slug']}/screenshots" 
 
             try:
