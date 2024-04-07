@@ -78,23 +78,34 @@ class WebDriver():
         self.driver.get(url)
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
+    
         script = soup.find('script', id='__NEXT_DATA__').text
         diccionario = json.loads(script)
         datos = diccionario['props']['pageProps']['searchResult']['data']
-        
-        
+     
         full_data = {}
         
         for mod in datos: 
+            url_avatar = mod['avatarUrl']
+            description = mod['summary']
             name = mod['name']
+            page_size = 200
+            url_screenshots = f"https://www.curseforge.com/minecraft/mc-mods/{mod['slug']}/screenshots" 
+
+            try:
+                list_screenshots = self.get_screenshots(url_screenshots)
+            except:
+                pass
+            
             id = mod['id']
-            url = f"https://www.curseforge.com/api/v1/mods/{id}/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas"
+            url = f"https://www.curseforge.com/api/v1/mods/{id}/files?pageIndex=0&pageSize={page_size}&sort=dateCreated&sortDescending=true&removeAlphas"
 
             dic_list = []
             
             resp = requests.get(url).json()
             for dat in resp['data']:
                 if "Forge" in dat['gameVersions']:
+                  
                     file_name = dat['fileName']
                     file_id = str(dat['id'])
                     id_format = f"{file_id[:4]}/{file_id[-3:]}"
@@ -102,9 +113,27 @@ class WebDriver():
                     
                     dic_list.append({
                         'url_download'    : url_download,
-                        'game_version' : "-".join(dat['gameVersions'])
+                        'game_version' : "_".join(dat['gameVersions'])
                     })
                     
-            full_data[name] = dic_list
-    
+            full_data[name] = {
+                "dic_list" : dic_list,
+                "list_screenshots" : list_screenshots,
+                "description" : description,
+                "url_avatar" : url_avatar,
+            }
+            
         return full_data
+
+    def get_screenshots(self, url):
+        self.driver.get(url)
+        html = self.driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+        img_tag = soup.find_all('img', alt='Screenshot thumbnail')
+
+        url_list = []
+        for i in img_tag:
+            img_url = i['src']
+            url_list.append(img_url)
+        
+        return url_list
