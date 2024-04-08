@@ -6,12 +6,12 @@
 
 tasks:
   - init: | 
-      pip install -r requirements.txt
-      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg
+      wget -q -O google_signing_key.pub https://dl-ssl.google.com/linux/linux_signing_key.pub
+      gpg --dearmor -o google_signing_key.gpg google_signing_key.pub
+      sudo mv google_signing_key.gpg /usr/share/keyrings/google-chrome-keyring.gpg
       echo "deb [signed-by=/usr/share/keyrings/google-chrome-keyring.gpg arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
       sudo apt-get update
       sudo apt-get install -y google-chrome-stable
-
 
     command: python main.py
 
